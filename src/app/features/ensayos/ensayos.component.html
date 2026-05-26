@@ -1,0 +1,94 @@
+<div class="page">
+  <header class="page-header">
+    <h1>🎵 Ensayos</h1>
+    <button class="btn-primary" (click)="abrirModal()">+ Nuevo Ensayo</button>
+  </header>
+
+  @if (mensaje) { <div class="alert alert-success">{{ mensaje }}</div> }
+
+  <div class="toolbar">
+    <input class="search-input" [(ngModel)]="busqueda" placeholder="Buscar ensayo o colectivo...">
+    <span class="total-badge">{{ filtrados.length }} ensayos</span>
+  </div>
+
+  @if (loading) { <div class="loading">Cargando...</div> }
+
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Ensayo</th>
+          <th>Colectivo</th>
+          <th>Fecha</th>
+          <th>Horario</th>
+          <th>Lugar</th>
+          <th>Estado</th>
+          <th>Asistencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (e of filtrados; track e.id) {
+          <tr>
+            <td><strong>{{ e.titulo }}</strong></td>
+            <td>{{ e.colectivoNombre }}</td>
+            <td>{{ e.fecha | date:'dd/MM/yyyy' }}</td>
+            <td>{{ e.horaInicio }} - {{ e.horaFin }}</td>
+            <td>{{ e.lugar }}</td>
+            <td><span class="badge" [class]="'badge-' + estadoClass(e.estado)">{{ e.estado }}</span></td>
+            <td class="center">
+              <span class="asistencia">{{ e.totalPresentes }}/{{ e.totalAsistencias }}</span>
+            </td>
+          </tr>
+        }
+        @empty { <tr><td colspan="7" class="empty">No hay ensayos registrados.</td></tr> }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (showModal) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>Nuevo Ensayo</h2>
+      <form (ngSubmit)="guardar()">
+        <div class="form-group">
+          <label>Título *</label>
+          <input [(ngModel)]="form.titulo" name="titulo" required>
+        </div>
+        <div class="form-group">
+          <label>Colectivo *</label>
+          <select [(ngModel)]="form.colectivoId" name="colectivoId" required>
+            <option [value]="0" disabled>Selecciona...</option>
+            @for (c of colectivos; track c.id) { <option [value]="c.id">{{ c.nombre }}</option> }
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha *</label>
+          <input type="date" [(ngModel)]="form.fecha" name="fecha" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Hora inicio</label>
+            <input type="time" [(ngModel)]="form.horaInicio" name="horaInicio">
+          </div>
+          <div class="form-group">
+            <label>Hora fin</label>
+            <input type="time" [(ngModel)]="form.horaFin" name="horaFin">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Lugar</label>
+          <input [(ngModel)]="form.lugar" name="lugar">
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea [(ngModel)]="form.descripcion" name="descripcion" rows="2"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

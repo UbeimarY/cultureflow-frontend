@@ -1,0 +1,26 @@
+.page { max-width: 1100px; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.page-header h1 { font-size: 24px; font-weight: 800; color: #1e1b4b; }
+.btn-primary { padding: 10px 20px; background: linear-gradient(135deg, #7c3aed, #5b21b6); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.btn-cancel { padding: 10px 20px; background: #f1f5f9; border: none; border-radius: 10px; font-size: 14px; cursor: pointer; }
+.alert-success { background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
+.loading, .empty { text-align: center; padding: 60px; color: #94a3b8; }
+.table-wrap { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+.data-table td { padding: 14px 16px; border-top: 1px solid #f1f5f9; font-size: 13px; }
+.center { text-align: center; }
+.badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+.badge-warning { background: #fef3c7; color: #92400e; }
+.puntaje { background: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+.sin-cal { color: #94a3b8; font-size: 12px; }
+.btn-sm { padding: 5px 10px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; }
+.btn-cal { background: #fef3c7; color: #92400e; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 999; }
+.modal { background: white; border-radius: 16px; padding: 32px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+.modal h2 { font-size: 18px; font-weight: 700; color: #1e1b4b; margin-bottom: 20px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 5px; }
+.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 13px; outline: none; font-family: inherit; }
+.form-group input:focus, .form-group textarea:focus { border-color: #7c3aed; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }

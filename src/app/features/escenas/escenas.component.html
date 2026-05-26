@@ -1,0 +1,126 @@
+<div class="page">
+  <header class="page-header">
+    <h1>🎬 Escenas y Estructura Coreográfica</h1>
+    <button class="btn-primary" (click)="abrirModal()">+ Nueva Escena Principal</button>
+  </header>
+
+  @if (mensaje) { <div class="alert alert-success">{{ mensaje }}</div> }
+
+  <div class="toolbar">
+    <div class="form-inline">
+      <label>Presentación ID:</label>
+      <input type="number" [(ngModel)]="presentacionIdVer" (change)="cargarArbol()" class="id-input">
+    </div>
+    <span class="info-badge">Árbol jerárquico recursivo</span>
+  </div>
+
+  @if (arbolTexto) {
+    <div class="arbol-texto">
+      <h3>📋 Árbol de estructura</h3>
+      <pre>{{ arbolTexto }}</pre>
+      <button class="btn-cancel" (click)="arbolTexto = ''">Cerrar</button>
+    </div>
+  }
+
+  @if (loading) { <div class="loading">Cargando escenas...</div> }
+
+  <div class="escenas-tree">
+    @for (escena of arbol; track escena.id) {
+      <ng-container *ngTemplateOutlet="escenaNode; context: { $implicit: escena, nivel: 0 }"></ng-container>
+    }
+    @empty { <div class="empty-tree">No hay escenas para esta presentación. Crea la primera escena principal.</div> }
+  </div>
+
+  <ng-template #escenaNode let-escena let-nivel="nivel">
+    <div class="escena-node" [style.marginLeft.px]="nivel * 28">
+      <div class="escena-card" [class]="'tipo-' + escena.tipoEscena.toLowerCase()">
+        <div class="escena-header">
+          <span class="escena-tipo-icon">{{ escena.tipoEscena === 'PRINCIPAL' ? '🎭' : escena.tipoEscena === 'SUB' ? '🎵' : '✨' }}</span>
+          <div class="escena-info">
+            <strong>{{ escena.nombre }}</strong>
+            <span class="escena-tipo">{{ escena.tipoEscena }}</span>
+          </div>
+          <div class="escena-dur">
+            <span class="dur-badge">⏱ {{ escena.duracionCalculada }} min</span>
+          </div>
+          <div class="escena-btns">
+            <button class="btn-sm btn-add" (click)="agregarSubEscena(escena.id)" title="Agregar subescena">+ Sub</button>
+            <button class="btn-sm btn-view" (click)="verArbolTexto(escena.id)" title="Ver árbol en texto">🌲</button>
+          </div>
+        </div>
+        @if (escena.descripcion) {
+          <p class="escena-desc">{{ escena.descripcion }}</p>
+        }
+        @if (escena.informacion) {
+          <p class="escena-info-text">{{ escena.informacion }}</p>
+        }
+      </div>
+
+      @for (sub of escena.subEscenas; track sub.id) {
+        <ng-container *ngTemplateOutlet="escenaNode; context: { $implicit: sub, nivel: nivel + 1 }"></ng-container>
+      }
+    </div>
+  </ng-template>
+</div>
+
+@if (showModal) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>{{ form.padreId ? 'Nueva Sub-escena' : 'Nueva Escena' }}</h2>
+      <form (ngSubmit)="guardar()">
+        <div class="form-group">
+          <label>Nombre *</label>
+          <input [(ngModel)]="form.nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+          <label>Tipo de escena</label>
+          <select [(ngModel)]="form.tipoEscena" name="tipoEscena">
+            @for (t of tiposEscena; track t) { <option [value]="t">{{ t }}</option> }
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Orden</label>
+            <input type="number" [(ngModel)]="form.orden" name="orden" min="1">
+          </div>
+          <div class="form-group">
+            <label>Duración (min)</label>
+            <input type="number" [(ngModel)]="form.duracionMinutos" name="duracion" min="1">
+          </div>
+        </div>
+        @if (form.tipoEscena === 'PRINCIPAL') {
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tema musical</label>
+              <input [(ngModel)]="form.temaMusical" name="temaMusical">
+            </div>
+            <div class="form-group">
+              <label>Coreógrafo</label>
+              <input [(ngModel)]="form.coreografo" name="coreografo">
+            </div>
+          </div>
+        }
+        @if (form.tipoEscena === 'SUB') {
+          <div class="form-group">
+            <label>Tipo de movimiento</label>
+            <input [(ngModel)]="form.tipoMovimiento" name="tipoMovimiento">
+          </div>
+        }
+        @if (form.tipoEscena === 'ESPECIAL') {
+          <div class="form-group">
+            <label>Efecto especial</label>
+            <input [(ngModel)]="form.efectoEspecial" name="efectoEspecial">
+          </div>
+        }
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea [(ngModel)]="form.descripcion" name="descripcion" rows="2"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Crear Escena</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

@@ -1,0 +1,73 @@
+<div class="page">
+  <header class="page-header">
+    <h1>💃 Colectivos Coreográficos</h1>
+    <button class="btn-primary" (click)="abrirModal()">+ Nuevo Colectivo</button>
+  </header>
+
+  @if (mensaje) { <div class="alert alert-success">{{ mensaje }}</div> }
+
+  <div class="toolbar">
+    <input class="search-input" [(ngModel)]="busqueda" placeholder="Buscar por nombre o ciudad...">
+    <span class="total-badge">{{ filtrados.length }} colectivos</span>
+  </div>
+
+  @if (loading) { <div class="loading">Cargando...</div> }
+
+  <div class="cards-grid">
+    @for (c of filtrados; track c.id) {
+      <div class="colectivo-card">
+        <div class="card-header">
+          <span class="card-icon">💃</span>
+          <div>
+            <h3>{{ c.nombre }}</h3>
+            <span class="card-city">📍 {{ c.ciudad }}</span>
+          </div>
+          <span class="status-badge" [class.active]="c.activo">{{ c.activo ? 'Activo' : 'Inactivo' }}</span>
+        </div>
+        <p class="card-desc">{{ c.descripcion }}</p>
+        <div class="card-meta">
+          <span>🎭 {{ c.genero }}</span>
+          <span>👥 {{ c.totalIntegrantes }} integrantes</span>
+          @if (c.directorNombre) { <span>🎓 {{ c.directorNombre }}</span> }
+        </div>
+        <div class="card-actions">
+          <button class="btn-edit" (click)="abrirModal(c)">✏️ Editar</button>
+          <button class="btn-delete" (click)="eliminar(c.id)">🗑️ Desactivar</button>
+        </div>
+      </div>
+    }
+    @empty { <div class="empty">No hay colectivos registrados.</div> }
+  </div>
+</div>
+
+@if (showModal) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>{{ editando ? 'Editar' : 'Nuevo' }} Colectivo</h2>
+      <form (ngSubmit)="guardar()">
+        <div class="form-group">
+          <label>Nombre *</label>
+          <input [(ngModel)]="form.nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea [(ngModel)]="form.descripcion" name="descripcion" rows="3"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ciudad</label>
+            <input [(ngModel)]="form.ciudad" name="ciudad">
+          </div>
+          <div class="form-group">
+            <label>Género artístico</label>
+            <input [(ngModel)]="form.genero" name="genero">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

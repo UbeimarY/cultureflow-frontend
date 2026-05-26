@@ -1,0 +1,38 @@
+<div class="page">
+  <header class="page-header">
+    <h1>👥 Gestión de Usuarios</h1>
+    <span class="total-badge">{{ filtrados.length }} usuarios</span>
+  </header>
+  @if (mensaje) { <div class="alert alert-success">{{ mensaje }}</div> }
+  <div class="toolbar">
+    <input class="search-input" [(ngModel)]="busqueda" placeholder="Buscar por nombre o usuario...">
+    <select class="filter-select" [(ngModel)]="filtroRol">
+      <option value="">Todos los roles</option>
+      @for (r of roles; track r) { <option [value]="r">{{ r }}</option> }
+    </select>
+  </div>
+  @if (loading) { <div class="loading">Cargando...</div> }
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr><th>Usuario</th><th>Nombre completo</th><th>Email</th><th>Rol</th><th>Estado</th><th>Fecha registro</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        @for (u of filtrados; track u.id) {
+          <tr>
+            <td><strong>{{ u.username }}</strong></td>
+            <td>{{ u.nombre }} {{ u.apellido }}</td>
+            <td>{{ u.email }}</td>
+            <td><span class="role-badge" [class]="rolClass(u.rol)">{{ u.rol }}</span></td>
+            <td><span class="status-badge" [class.active]="u.activo">{{ u.activo ? 'Activo' : 'Inactivo' }}</span></td>
+            <td>{{ u.createdAt | date:'dd/MM/yyyy' }}</td>
+            <td>
+              @if (u.activo) { <button class="btn-sm btn-delete" (click)="desactivar(u.id)">🚫 Desactivar</button> }
+            </td>
+          </tr>
+        }
+        @empty { <tr><td colspan="7" class="empty">No hay usuarios.</td></tr> }
+      </tbody>
+    </table>
+  </div>
+</div>

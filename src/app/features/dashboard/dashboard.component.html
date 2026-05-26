@@ -1,0 +1,111 @@
+<div class="dashboard">
+  <header class="page-header">
+    <h1>📊 Dashboard</h1>
+    <p>Bienvenido, <strong>{{ auth.getNombreCompleto() }}</strong></p>
+  </header>
+
+  @if (loading) {
+    <div class="loading-spinner">Cargando estadísticas...</div>
+  }
+
+  @if (dashboard) {
+    <!-- Tarjetas de estadísticas -->
+    <section class="stats-grid">
+      <div class="stat-card purple">
+        <div class="stat-icon">👥</div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalUsuarios }}</span>
+          <span class="stat-label">Usuarios totales</span>
+        </div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon">💃</div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.colectivosActivos }}</span>
+          <span class="stat-label">Colectivos activos</span>
+        </div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon">🎪</div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.eventosActivos }}</span>
+          <span class="stat-label">Eventos activos</span>
+        </div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-icon">🎵</div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalEnsayos }}</span>
+          <span class="stat-label">Ensayos registrados</span>
+        </div>
+      </div>
+      <div class="stat-card pink">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalPresentaciones }}</span>
+          <span class="stat-label">Presentaciones</span>
+        </div>
+      </div>
+      <div class="stat-card indigo">
+        <div class="stat-icon">🎭</div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalIntegrantes }}</span>
+          <span class="stat-label">Integrantes</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="bottom-grid">
+      <!-- Distribución de roles -->
+      <section class="card">
+        <h2>👤 Usuarios por Rol</h2>
+        <div class="roles-list">
+          @for (item of dashboard.usuariosPorRol | keyvalue; track item.key) {
+            <div class="role-row">
+              <span class="role-name">{{ item.key }}</span>
+              <div class="role-bar-wrap">
+                <div class="role-bar"
+                     [style.width.%]="(+item.value / dashboard!.totalUsuarios) * 100"
+                     [class]="getRolBadgeClass(item.key)">
+                </div>
+              </div>
+              <span class="role-count">{{ item.value }}</span>
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Próximos eventos -->
+      <section class="card">
+        <h2>🗓️ Próximos Eventos</h2>
+        @if (dashboard.proximosEventos.length === 0) {
+          <p class="empty-msg">No hay eventos próximos programados.</p>
+        }
+        <div class="eventos-list">
+          @for (evento of dashboard.proximosEventos; track evento.id) {
+            <div class="evento-item">
+              <div class="evento-info">
+                <strong>{{ evento.nombre }}</strong>
+                <span>{{ evento.lugar }} · {{ evento.fechaInicio | date:'dd MMM yyyy' }}</span>
+              </div>
+              <span class="badge" [class]="getEstadoBadge(evento.estado)">{{ evento.estado }}</span>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+
+    <!-- Accesos rápidos -->
+    @if (auth.isAdmin() || auth.isDirector()) {
+      <section class="card quick-actions">
+        <h2>⚡ Accesos rápidos</h2>
+        <div class="actions-grid">
+          <a routerLink="/colectivos" class="action-btn">💃 Gestionar Colectivos</a>
+          <a routerLink="/eventos" class="action-btn">🎪 Ver Eventos</a>
+          <a routerLink="/ensayos" class="action-btn">🎵 Ensayos</a>
+          <a routerLink="/escenas" class="action-btn">🎬 Escenas</a>
+        </div>
+      </section>
+    }
+  }
+</div>

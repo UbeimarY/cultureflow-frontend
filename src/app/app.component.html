@@ -1,0 +1,31 @@
+<div class="app-wrapper">
+  @if (auth.isLoggedIn()) {
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">🎭</div>
+        <h2>CultureFlow</h2>
+      </div>
+      <div class="user-info">
+        <span class="user-name">{{ auth.getNombreCompleto() }}</span>
+        <span class="user-role badge">{{ auth.getRol() }}</span>
+      </div>
+      <ul class="nav-links">
+        <li><a routerLink="/dashboard" routerLinkActive="active">📊 Dashboard</a></li>
+        @if (auth.isAdmin() || auth.isDirector()) {
+          <li><a routerLink="/colectivos" routerLinkActive="active">💃 Colectivos</a></li>
+          <li><a routerLink="/eventos" routerLinkActive="active">🎪 Eventos</a></li>
+          <li><a routerLink="/ensayos" routerLinkActive="active">🎵 Ensayos</a></li>
+          <li><a routerLink="/escenas" routerLinkActive="active">🎬 Escenas</a></li>
+        }
+        <li><a routerLink="/presentaciones" routerLinkActive="active">🏆 Presentaciones</a></li>
+        @if (auth.isAdmin()) {
+          <li><a routerLink="/usuarios" routerLinkActive="active">👥 Usuarios</a></li>
+        }
+      </ul>
+      <button class="logout-btn" (click)="auth.logout()">🚪 Cerrar sesión</button>
+    </nav>
+  }
+  <main [class.with-sidebar]="auth.isLoggedIn()">
+    <router-outlet />
+  </main>
+</div>

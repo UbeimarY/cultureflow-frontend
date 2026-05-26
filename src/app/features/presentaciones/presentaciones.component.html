@@ -1,0 +1,86 @@
+<div class="page">
+  <header class="page-header">
+    <h1>🏆 Presentaciones</h1>
+    @if (auth.isAdmin() || auth.isDirector()) {
+      <button class="btn-primary" (click)="abrirModal()">+ Nueva Presentación</button>
+    }
+  </header>
+  @if (mensaje) { <div class="alert alert-success">{{ mensaje }}</div> }
+  @if (loading) { <div class="loading">Cargando...</div> }
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr><th>Presentación</th><th>Evento</th><th>Colectivo</th><th>Fecha/Hora</th><th>Estado</th><th>Puntaje</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        @for (p of presentaciones; track p.id) {
+          <tr>
+            <td><strong>{{ p.nombre }}</strong></td>
+            <td>{{ p.eventoNombre }}</td>
+            <td>{{ p.colectivoNombre }}</td>
+            <td>{{ p.fechaHora | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td><span class="badge badge-warning">{{ p.estado }}</span></td>
+            <td class="center">
+              @if (p.calificada) { <span class="puntaje">{{ p.puntajeFinal | number:'1.1-1' }}</span> }
+              @else { <span class="sin-cal">Sin calificar</span> }
+            </td>
+            <td>
+              @if (auth.isJurado()) {
+                <button class="btn-sm btn-cal" (click)="abrirCalificar(p.id)">⭐ Calificar</button>
+              }
+            </td>
+          </tr>
+        }
+        @empty { <tr><td colspan="7" class="empty">No hay presentaciones registradas.</td></tr> }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (showModal) {
+  <div class="modal-overlay" (click)="showModal = false">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>Nueva Presentación</h2>
+      <form (ngSubmit)="guardar()">
+        <div class="form-group"><label>Nombre *</label><input [(ngModel)]="form.nombre" name="nombre" required></div>
+        <div class="form-group"><label>Evento *</label>
+          <select [(ngModel)]="form.eventoId" name="eventoId">
+            <option [value]="0" disabled>Selecciona...</option>
+            @for (e of eventos; track e.id) { <option [value]="e.id">{{ e.nombre }}</option> }
+          </select>
+        </div>
+        <div class="form-group"><label>Colectivo *</label>
+          <select [(ngModel)]="form.colectivoId" name="colectivoId">
+            <option [value]="0" disabled>Selecciona...</option>
+            @for (c of colectivos; track c.id) { <option [value]="c.id">{{ c.nombre }}</option> }
+          </select>
+        </div>
+        <div class="form-group"><label>Fecha y hora *</label><input type="datetime-local" [(ngModel)]="form.fechaHora" name="fechaHora" required></div>
+        <div class="form-group"><label>Duración estimada (min)</label><input type="number" [(ngModel)]="form.duracionEstimadaMin" name="dur"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="showModal = false">Cancelar</button>
+          <button type="submit" class="btn-primary">Crear</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (showCalModal) {
+  <div class="modal-overlay" (click)="showCalModal = false">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>⭐ Calificar Presentación</h2>
+      <form (ngSubmit)="calificar()">
+        <div class="form-group"><label>ID del Jurado *</label><input type="number" [(ngModel)]="calForm.juradoId" name="juradoId" required></div>
+        <div class="form-group"><label>Puntaje Técnica (0-100)</label><input type="number" [(ngModel)]="calForm.puntajeTecnica" name="tec" min="0" max="100"></div>
+        <div class="form-group"><label>Puntaje Artístico (0-100)</label><input type="number" [(ngModel)]="calForm.puntajeArtistico" name="art" min="0" max="100"></div>
+        <div class="form-group"><label>Puntaje Vestuario (0-100)</label><input type="number" [(ngModel)]="calForm.puntajeVestuario" name="ves" min="0" max="100"></div>
+        <div class="form-group"><label>Observaciones</label><textarea [(ngModel)]="calForm.observaciones" name="obs" rows="3"></textarea></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="showCalModal = false">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar calificación</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

@@ -1,0 +1,23 @@
+.page { max-width: 1100px; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.page-header h1 { font-size: 24px; font-weight: 800; color: #1e1b4b; }
+.total-badge { background: #ede9fe; color: #5b21b6; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+.alert-success { background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
+.toolbar { display: flex; gap: 12px; margin-bottom: 20px; }
+.search-input { flex: 1; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; }
+.search-input:focus { border-color: #7c3aed; }
+.filter-select { padding: 10px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 13px; outline: none; }
+.loading, .empty { text-align: center; padding: 60px; color: #94a3b8; }
+.table-wrap { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+.data-table td { padding: 12px 16px; border-top: 1px solid #f1f5f9; font-size: 13px; }
+.role-badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+.role-badge.admin { background: #ede9fe; color: #5b21b6; }
+.role-badge.director { background: #dbeafe; color: #1d4ed8; }
+.role-badge.jurado { background: #fef3c7; color: #92400e; }
+.role-badge.integrante { background: #d1fae5; color: #065f46; }
+.status-badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; background: #fee2e2; color: #991b1b; }
+.status-badge.active { background: #d1fae5; color: #065f46; }
+.btn-sm { padding: 5px 10px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; }
+.btn-delete { background: #fee2e2; color: #991b1b; }
