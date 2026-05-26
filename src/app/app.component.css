@@ -17,18 +17,22 @@
 
 body { font-family: 'Segoe UI', sans-serif; background: var(--surface); color: var(--text); }
 
-.app-wrapper { display: flex; min-height: 100vh; }
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
 
 .sidebar {
   width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
   background: linear-gradient(180deg, var(--dark) 0%, #312e81 100%);
   color: white;
   display: flex;
   flex-direction: column;
   position: fixed;
   top: 0; left: 0; bottom: 0;
-  padding: 0;
   z-index: 100;
+  overflow-y: auto;
 }
 
 .sidebar-header {
@@ -91,5 +95,14 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--surface); color: v
 }
 .logout-btn:hover { background: rgba(239,68,68,0.3); color: white; }
 
-main { flex: 1; padding: 32px; }
-main.with-sidebar { margin-left: var(--sidebar-w); }
+main {
+  flex: 1;
+  min-width: 0;
+  padding: 32px;
+  width: 100%;
+}
+
+main.with-sidebar {
+  margin-left: var(--sidebar-w);
+  width: calc(100% - var(--sidebar-w));
+}
